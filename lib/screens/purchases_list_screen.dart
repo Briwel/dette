@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../services/offline_storage_service.dart';
 import 'payment_screen.dart';
 
 class PurchasesListScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class PurchasesListScreen extends StatefulWidget {
 class _PurchasesListScreenState extends State<PurchasesListScreen> {
   List<dynamic> _allPurchases = [];
   bool _isLoading = true;
+  final Set<dynamic> _selectedPurchases = {};
+  bool _isSelectionMode = false;
 
   @override
   void initState() {
@@ -47,6 +50,59 @@ class _PurchasesListScreenState extends State<PurchasesListScreen> {
     }
   }
 
+  Future<void> _deleteSelectedPurchases() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Supprimer'),
+        content: Text('Supprimer ${_selectedPurchases.length} achat(s) réglé(s) ?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
+          ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Supprimer')),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      final all = await OfflineStorageService.getPurchases();
+      final selectedIds = _selectedPurchases.map((p) => p['id']).toSet();
+      final remaining = all.where((p) => !selectedIds.contains(p['id'])).toList();
+      await OfflineStorageService.savePurchases(remaining);
+      
+      setState(() {
+        _allPurchases = remaining;
+        _selectedPurchases.clear();
+        _isSelectionMode = false;
+      });
+      _fetchPurchases();
+    }
+  }
+
+  void _toggleSelection(dynamic p, bool isPaidList) {
+    setState(() {
+      if (_selectedPurchases.contains(p)) {
+        _selectedPurchases.remove(p);
+        if (_selectedPurchases.isEmpty) _isSelectionMode = false;
+      } else {
+        _selectedPurchases.add(p);
+        _isSelectionMode = true;
+      }
+    });
+  }
+
+  void _selectAll(bool showPaid) {
+    final list = _getFilteredPurchases(showPaid);
+    setState(() {
+      if (_selectedPurchases.length == list.length) {
+        _selectedPurchases.clear();
+        _isSelectionMode = false;
+      } else {
+        _selectedPurchases.addAll(list);
+        _isSelectionMode = true;
+      }
+    });
+  }
+
   List<dynamic> _getFilteredPurchases(bool showPaid) {
     if (showPaid) {
       return _allPurchases.where((p) => (double.tryParse(p['montant_restant']?.toString() ?? '0') ?? 0) <= 0).toList();
@@ -58,12 +114,23 @@ class _PurchasesListScreenState extends State<PurchasesListScreen> {
   Widget _buildList(bool showPaid) {
     final list = _getFilteredPurchases(showPaid);
     if (list.isEmpty) return const Center(child: Text('Aucun achat trouvé'));
+    
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
         final p = list[index];
+        final isSelected = _selectedPurchases.contains(p);
         final reste = double.tryParse(p['montant_restant']?.toString() ?? '0') ?? 0;
+        
         return ListTile(
+          selected: isSelected,
+          tileColor: isSelected ? Colors.blue.withValues(alpha: 0.2) : null,
+          leading: _isSelectionMode && showPaid
+              ? Checkbox(
+                  value: isSelected,
+                  onChanged: (val) => _toggleSelection(p, showPaid),
+                )
+              : null,
           title: Text(
             p['description'] ?? 'Achat',
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -80,21 +147,32 @@ class _PurchasesListScreenState extends State<PurchasesListScreen> {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(
-                reste > 0 ? Icons.chevron_right : Icons.check_circle,
-                color: reste > 0 ? Colors.blue : Colors.green,
-              ),
+              if (!showPaid)
+                Icon(
+                  reste > 0 ? Icons.chevron_right : Icons.check_circle,
+                  color: reste > 0 ? Colors.blue : Colors.green,
+                ),
             ],
           ),
-          onTap: reste > 0 ? () async {
-             final res = await Navigator.push(context, MaterialPageRoute(
-               builder: (context) => PaymentScreen(
-                 fournisseurNom: p['supplierNom'],
-                 supplierId: p['supplier_id'] ?? p['supplierId'],
-               ),
-             ));
-             if (res == true) _fetchPurchases();
+          onLongPress: showPaid ? () {
+            setState(() {
+              _isSelectionMode = true;
+              if (!_selectedPurchases.contains(p)) {
+                _selectedPurchases.add(p);
+              }
+            });
           } : null,
+          onTap: _isSelectionMode && showPaid 
+              ? () => _toggleSelection(p, showPaid)
+              : (reste > 0 ? () async {
+                  final res = await Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      fournisseurNom: p['supplierNom'],
+                      supplierId: p['supplier_id'] ?? p['supplierId'],
+                    ),
+                  ));
+                  if (res == true) _fetchPurchases();
+                } : null),
         );
       },
     );
@@ -103,30 +181,41 @@ class _PurchasesListScreenState extends State<PurchasesListScreen> {
   @override
   Widget build(BuildContext context) {
     String title = 'Historique des achats';
-    if (widget.onlyUrgent) title = 'Paiements urgents';
-    else if (widget.supplierNom != null) title = 'Achats: ${widget.supplierNom}';
+    if (widget.onlyUrgent) {
+      title = 'Paiements urgents';
+    } else if (widget.supplierNom != null) title = 'Achats: ${widget.supplierNom}';
     else if (widget.supplierId == null) title = 'Achats en cours';
 
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          title: Text(_isSelectionMode ? '${_selectedPurchases.length} sélectionné(s)' : title),
+          actions: _isSelectionMode ? [
+             IconButton(icon: const Icon(Icons.select_all), onPressed: () => _selectAll(true)),
+          ] : null,
           bottom: const TabBar(
             tabs: [
               Tab(text: 'En cours'),
-              Tab(text: 'Payés'),
+              Tab(text: 'Réglés'),
             ],
           ),
         ),
         body: _isLoading 
           ? const Center(child: CircularProgressIndicator())
-          : const TabBarView(
+          : TabBarView(
               children: [
                 _PurchasesListView(showPaid: false),
                 _PurchasesListView(showPaid: true),
               ],
             ),
+        floatingActionButton: _isSelectionMode && _selectedPurchases.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: _deleteSelectedPurchases,
+              backgroundColor: Colors.red,
+              child: const Icon(Icons.delete),
+            )
+          : null,
       ),
     );
   }

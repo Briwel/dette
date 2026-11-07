@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class QuickActionButton extends StatelessWidget {
   final IconData icon;
@@ -11,7 +12,7 @@ class QuickActionButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = AppColors.surface,
   });
 
   @override
@@ -20,18 +21,18 @@ class QuickActionButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        foregroundColor: Colors.black87,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.blue.withValues(alpha: 0.2)),
+          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
         ),
         padding: const EdgeInsets.all(16),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 32, color: Colors.blue),
+          Icon(icon, size: 32, color: AppColors.primary),
           const SizedBox(height: 8),
           Text(
             label,

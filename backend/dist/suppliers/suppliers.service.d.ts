@@ -42,4 +42,20 @@ export declare class SuppliersService {
         actif: boolean;
         date_creation: Date;
     }>;
+    update(id: number, supplierData: Partial<Supplier>): Promise<{
+        dette: number;
+        nbAchats: number;
+        purchases: Purchase[];
+        id: number;
+        user_id: number;
+        nom: string;
+        telephone: string;
+        photo_uri: string;
+        couleur: string;
+        actif: boolean;
+        date_creation: Date;
+    } | null>;
+    remove(id: number): Promise<{
+        success: boolean;
+    }>;
 }

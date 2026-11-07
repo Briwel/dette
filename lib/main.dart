@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'screens/main_screens.dart';
 import 'theme/app_theme.dart';
@@ -15,66 +16,37 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Dantokpa Crédit',
       theme: AppTheme.lightTheme,
-      home: const MainNavigation(),
+      home: const SplashScreen(),
     );
   }
 }
-// ... (le reste du code de MainNavigation reste inchangé)
 
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    FournisseursScreen(),
-    VentesScreen(),
-    ProfilScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 2), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MainNavigation()),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.storefront_outlined),
-            activeIcon: Icon(Icons.storefront),
-            label: 'Fournisseurs',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.payments_outlined),
-            activeIcon: Icon(Icons.payments),
-            label: 'Ventes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
-        onTap: _onItemTapped,
+    return const Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Image(
+          image: AssetImage('interface(dette)/logo.avif'),
+        ),
       ),
     );
   }

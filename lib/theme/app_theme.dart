@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBlue = Colors.blue;
-  static const Color debtRed = Colors.red;
-  static const Color partialPaymentOrange = Colors.orange;
-  static const Color paidGreen = Colors.green;
-  static const Color revenuePurple = Colors.deepPurple;
-  
-  static const Color backgroundColor = Color(0xFFF5F9FC); // Fond très clair
+  // Palette SaaS moderne
+  static const Color primary = Color(0xFF4F46E5); // Indigo Profond
+  static const Color background = Color(0xFFF8FAFC); // Off-white
+  static const Color surface = Color(0xFFFFFFFF); // White
+  static const Color border = Color(0xFFE2E8F0); // Bordure subtile
+
+  // États
+  static const Color success = Color(0xFF10B981); // Emerald
+  static const Color warning = Color(0xFFF59E0B); // Amber
+  static const Color error = Color(0xFFF43F5E); // Rose
+
+  // Texte
+  static const Color textPrimary = Color(0xFF1E293B); // Slate 800
+  static const Color textSecondary = Color(0xFF64748B); // Slate 500
 }
 
 class AppTheme {
@@ -15,14 +22,23 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primaryBlue,
-        background: AppColors.backgroundColor,
+        seedColor: AppColors.primary,
+        primary: AppColors.primary,
+        surface: AppColors.surface,
+        background: AppColors.background,
+        error: AppColors.error,
       ),
-      scaffoldBackgroundColor: AppColors.backgroundColor,
+      scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.background,
         elevation: 0,
         centerTitle: true,
+        foregroundColor: AppColors.textPrimary,
+        titleTextStyle: TextStyle(
+          color: AppColors.textPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

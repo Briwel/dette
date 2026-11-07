@@ -7,6 +7,7 @@ class OfflineStorageService {
   static const String _keyPurchases = 'dette_purchases_local';
   static const String _keyRepayments = 'dette_repayments_local';
   static const String _keyDailyRevenues = 'dette_daily_revenues_local';
+  static const String _keyPlannings = 'dette_plannings_local';
 
   // --- SUPPLIERS ---
   static Future<List<Map<String, dynamic>>> getSuppliers() async {
@@ -91,18 +92,28 @@ class OfflineStorageService {
       final maps = list.map((e) => Map<String, dynamic>.from(e)).toList();
 
       if (supplierId != null || supplierNom != null) {
-        final filtered = maps.where((p) {
-          final pSupplierId = p['supplier_id']?.toString() ?? p['supplierId']?.toString();
-          final pSupplierNom = p['supplierNom']?.toString() ?? p['fournisseurNom']?.toString();
+        final sidStr = supplierId?.toString();
+        final nomLower = supplierNom?.trim().toLowerCase();
 
-          bool matchId = supplierId != null && pSupplierId == supplierId.toString();
-          bool matchNom = supplierNom != null && 
-              pSupplierNom?.trim().toLowerCase() == supplierNom.trim().toLowerCase();
-          
+        final filtered = maps.where((p) {
+          // Match by supplier ID (handle int or string stored values)
+          final pSupplierId = (p['supplier_id'] ?? p['supplierId'])?.toString();
+          bool matchId = sidStr != null && pSupplierId != null && pSupplierId == sidStr;
+
+          // Match by supplier name (multiple field names)
+          final pNom = (p['supplierNom'] ?? p['fournisseurNom'] ?? 
+                        p['supplier_nom'] ?? '')?.toString().trim().toLowerCase();
+          bool matchNom = nomLower != null && nomLower.isNotEmpty && pNom == nomLower;
+
           return matchId || matchNom;
         }).toList();
-        
+
         debugPrint('DEBUG: Looking for ID: $supplierId, Name: $supplierNom. Found: ${filtered.length} purchases.');
+        if (filtered.isEmpty && maps.isNotEmpty) {
+          debugPrint('DEBUG: Sample purchase keys: ${maps.first.keys.toList()}');
+          debugPrint('DEBUG: Sample purchase supplier_id: ${maps.first['supplier_id']} (${maps.first['supplier_id'].runtimeType})');
+          debugPrint('DEBUG: Sample purchase supplierNom: ${maps.first['supplierNom']}');
+        }
         return filtered;
       }
       return maps;
@@ -423,6 +434,65 @@ class OfflineStorageService {
       'suggestedDailyPayment': suggestedDailyPayment,
       'cards': cards,
     };
+  }
+
+  // --- PLANNED REPAYMENTS ---
+  static Future<List<Map<String, dynamic>>> getPlannedRepayments() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = prefs.getString(_keyPlannings);
+      if (jsonString == null || jsonString.isEmpty) return [];
+      final List<dynamic> list = json.decode(jsonString);
+      return list.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (e) {
+      debugPrint('Error reading local plannings: $e');
+      return [];
+    }
+  }
+
+  static Future<void> savePlannings(List<dynamic> plannings) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_keyPlannings, json.encode(plannings));
+    } catch (e) {
+      debugPrint('Error saving local plannings: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> addPlannedRepayment(
+      Map<String, dynamic> data) async {
+    final list = await getPlannedRepayments();
+    final newId = DateTime.now().millisecondsSinceEpoch;
+    final item = {
+      'id': data['id'] ?? newId,
+      'supplier_id': data['supplier_id'],
+      'fournisseurNom': data['fournisseurNom'] ?? '',
+      'montant_prevu': (data['montant_prevu'] ?? 0).toDouble(),
+      'date_prevue': data['date_prevue'] ?? DateTime.now().toIso8601String(),
+      'note': data['note'] ?? '',
+      'statut': data['statut'] ?? 'planifie',
+      'created_at': DateTime.now().toIso8601String(),
+    };
+    list.insert(0, item);
+    await savePlannings(list);
+    return item;
+  }
+
+  static Future<void> markPlanningAsDone(dynamic id) async {
+    final list = await getPlannedRepayments();
+    final index =
+        list.indexWhere((p) => p['id']?.toString() == id.toString());
+    if (index != -1) {
+      list[index]['statut'] = 'effectue';
+      list[index]['date_effectuee'] = DateTime.now().toIso8601String();
+      await savePlannings(list);
+    }
+  }
+
+  static Future<void> deletePlanning(dynamic id) async {
+    final list = await getPlannedRepayments();
+    list.removeWhere((p) => p['id']?.toString() == id.toString());
+    await savePlannings(list);
   }
 
   // --- HELPER: Debugging ---

@@ -20,7 +20,7 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
 
   DateTime _selectedDate = DateTime.now();
   final List<Map<String, dynamic>> _items = [
-    {'name': 'Riz', 'quantity': '5 sacs', 'price': '10000'},
+    {'name': '', 'quantity': '', 'price': ''},
   ];
   final TextEditingController _dejaPayeController = TextEditingController(text: '0');
 

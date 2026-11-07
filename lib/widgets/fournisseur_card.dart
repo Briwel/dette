@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:intl/intl.dart';
 import '../screens/supplier_detail_screen.dart';
+import '../theme/app_theme.dart';
 
 class FournisseurCard extends StatelessWidget {
   final int? id;
@@ -23,14 +25,14 @@ class FournisseurCard extends StatelessWidget {
   });
 
   Color _parseColor(String? hex) {
-    if (hex == null || hex.isEmpty) return const Color(0xFFDBEAFE);
+    if (hex == null || hex.isEmpty) return AppColors.primary.withValues(alpha: 0.1);
     try {
       final clean = hex.replaceAll('#', '');
       if (clean.length == 6) {
         return Color(int.parse('FF$clean', radix: 16));
       }
     } catch (_) {}
-    return const Color(0xFFDBEAFE);
+    return AppColors.primary.withValues(alpha: 0.1);
   }
 
   @override
@@ -40,16 +42,9 @@ class FournisseurCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppColors.border),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -73,14 +68,19 @@ class FournisseurCard extends StatelessWidget {
             CircleAvatar(
               radius: 26,
               backgroundColor: bgColor,
-              child: Text(
-                nom.isNotEmpty ? nom[0].toUpperCase() : 'F',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Color(0xFF1F2937),
-                ),
-              ),
+              backgroundImage: (photoUrl != null && photoUrl!.startsWith('data:image'))
+                  ? MemoryImage(base64Decode(photoUrl!.split(',').last))
+                  : null,
+              child: (photoUrl == null || !photoUrl!.startsWith('data:image'))
+                  ? Text(
+                      nom.isNotEmpty ? nom[0].toUpperCase() : 'F',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: AppColors.textPrimary,
+                      ),
+                    )
+                  : null,
             ),
             if (dette > 50000)
               Positioned(
@@ -90,7 +90,7 @@ class FournisseurCard extends StatelessWidget {
                   width: 12,
                   height: 12,
                   decoration: const BoxDecoration(
-                    color: Colors.red,
+                    color: AppColors.error,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -102,13 +102,13 @@ class FournisseurCard extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 17,
-            color: Color(0xFF1F2937),
+            color: AppColors.textPrimary,
           ),
         ),
         subtitle: Text(
           dette == 0 ? 'À jour' : '$nbAchats achat${nbAchats > 1 ? 's' : ''}',
           style: const TextStyle(
-            color: Color(0xFF6B7280),
+            color: AppColors.textSecondary,
             fontSize: 14,
           ),
         ),
@@ -121,13 +121,13 @@ class FournisseurCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: dette > 0 ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
+                color: dette > 0 ? AppColors.error : AppColors.success,
               ),
             ),
             const SizedBox(height: 2),
             const Text(
               'Dette totale',
-              style: TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
+              style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
             ),
           ],
         ),

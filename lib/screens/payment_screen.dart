@@ -159,7 +159,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -216,7 +216,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -246,7 +246,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,9 +258,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                        border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.withOpacity(0.05),
+                        color: Colors.blue.withValues(alpha: 0.05),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -337,7 +337,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       style: OutlinedButton.styleFrom(
         foregroundColor: isSelected ? const Color(0xFF2563EB) : const Color(0xFF475569),
         side: BorderSide(
-          color: isSelected ? const Color(0xFF2563EB) : Colors.grey.withOpacity(0.3),
+          color: isSelected ? const Color(0xFF2563EB) : Colors.grey.withValues(alpha: 0.3),
           width: isSelected ? 2 : 1,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

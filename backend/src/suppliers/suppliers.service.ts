@@ -56,4 +56,14 @@ export class SuppliersService {
       nbAchats: 0,
     };
   }
+
+  async update(id: number, supplierData: Partial<Supplier>) {
+    await this.suppliersRepository.update(id, supplierData);
+    return this.findOne(id);
+  }
+
+  async remove(id: number) {
+    await this.suppliersRepository.update(id, { actif: false });
+    return { success: true };
+  }
 }

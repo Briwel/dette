@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
 
 class AddSupplierScreen extends StatefulWidget {
-  const AddSupplierScreen({super.key});
+  final Map<String, dynamic>? supplier;
+
+  const AddSupplierScreen({super.key, this.supplier});
 
   @override
   State<AddSupplierScreen> createState() => _AddSupplierScreenState();
@@ -12,14 +17,16 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   
-  int _selectedColorIndex = 1; // Default to second color (blue circle with checkmark)
+  int _selectedColorIndex = 1;
   bool _isLoading = false;
+  XFile? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
 
   final List<Color> _colors = const [
-    Color(0xFFDCFCE7), // Light green
-    Color(0xFFDBEAFE), // Light blue
-    Color(0xFFFEF3C7), // Light yellow
-    Color(0xFFFCE7F3), // Light pink
+    Color(0xFFDCFCE7),
+    Color(0xFFDBEAFE),
+    Color(0xFFFEF3C7),
+    Color(0xFFFCE7F3),
   ];
 
   final List<String> _colorHexes = const [
@@ -30,10 +37,39 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.supplier != null) {
+      _nomController.text = widget.supplier!['nom'] ?? '';
+      _phoneController.text = widget.supplier!['telephone'] ?? '';
+      String colorHex = widget.supplier!['couleur'] ?? '#DBEAFE';
+      int index = _colorHexes.indexOf(colorHex);
+      if (index != -1) {
+        _selectedColorIndex = index;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _nomController.dispose();
     _phoneController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 300, maxHeight: 300);
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
+  }
+
+  Future<String?> _convertImageToBase64() async {
+    if (_selectedImage == null) return null;
+    final bytes = await _selectedImage!.readAsBytes();
+    return 'data:image/jpeg;base64,${base64Encode(bytes)}';
   }
 
   Future<void> _submit() async {
@@ -50,11 +86,21 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
     });
 
     try {
-      await ApiService.addSupplier({
+      final photoBase64 = await _convertImageToBase64();
+      final Map<String, dynamic> data = {
         'nom': nom,
         'telephone': _phoneController.text.trim(),
         'couleur': _colorHexes[_selectedColorIndex],
-      });
+      };
+      if (photoBase64 != null) {
+        data['photo'] = photoBase64;
+      }
+
+      if (widget.supplier != null && widget.supplier!['id'] != null) {
+        await ApiService.updateSupplier(widget.supplier!['id'], data);
+      } else {
+        await ApiService.addSupplier(data);
+      }
       if (mounted) {
         Navigator.pop(context, true);
       }
@@ -85,9 +131,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
           icon: const Icon(Icons.arrow_back, color: Color(0xFF374151)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Ajouter un fournisseur',
-          style: TextStyle(
+        title: Text(
+          widget.supplier != null ? 'Modifier un fournisseur' : 'Ajouter un fournisseur',
+          style: const TextStyle(
             color: Color(0xFF374151),
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -101,13 +147,8 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 12),
-            // Circular photo upload placeholder
             GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Sélection de photo à venir')),
-                );
-              },
+              onTap: _pickImage,
               child: Container(
                 width: 110,
                 height: 110,
@@ -118,26 +159,34 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                     color: const Color(0xFF90C2F1),
                     width: 1.5,
                   ),
+                  image: _selectedImage != null
+                      ? DecorationImage(
+                          image: FileImage(File(_selectedImage!.path)),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_a_photo_outlined,
-                      size: 32,
-                      color: Color(0xFF374151),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Ajouter',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF374151),
-                      ),
-                    ),
-                  ],
-                ),
+                child: _selectedImage == null
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo_outlined,
+                            size: 32,
+                            color: Color(0xFF374151),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Ajouter',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF374151),
+                            ),
+                          ),
+                        ],
+                      )
+                    : null,
               ),
             ),
             const SizedBox(height: 8),
@@ -310,9 +359,9 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                       child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                     )
                   : const Icon(Icons.save_outlined, color: Colors.white),
-              label: const Text(
-                'Enregistrer',
-                style: TextStyle(
+              label: Text(
+                widget.supplier != null ? 'Enregistrer les modifications' : 'Enregistrer',
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

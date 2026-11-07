@@ -19,6 +19,9 @@ export class Purchase {
   @Column()
   date_achat: Date;
 
+  @Column({ nullable: true, type: 'text' })
+  description: string;
+
   @Column({ nullable: true })
   date_echeance: Date;
 

@@ -29,6 +29,12 @@ let SuppliersController = class SuppliersController {
     create(createSupplierDto) {
         return this.suppliersService.create(createSupplierDto);
     }
+    update(id, updateSupplierDto) {
+        return this.suppliersService.update(+id, updateSupplierDto);
+    }
+    remove(id) {
+        return this.suppliersService.remove(+id);
+    }
 };
 exports.SuppliersController = SuppliersController;
 __decorate([
@@ -51,6 +57,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], SuppliersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], SuppliersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], SuppliersController.prototype, "remove", null);
 exports.SuppliersController = SuppliersController = __decorate([
     (0, common_1.Controller)('suppliers'),
     __metadata("design:paramtypes", [suppliers_service_1.SuppliersService])

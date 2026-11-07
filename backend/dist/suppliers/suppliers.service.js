@@ -65,6 +65,14 @@ let SuppliersService = class SuppliersService {
             nbAchats: 0,
         };
     }
+    async update(id, supplierData) {
+        await this.suppliersRepository.update(id, supplierData);
+        return this.findOne(id);
+    }
+    async remove(id) {
+        await this.suppliersRepository.update(id, { actif: false });
+        return { success: true };
+    }
 };
 exports.SuppliersService = SuppliersService;
 exports.SuppliersService = SuppliersService = __decorate([

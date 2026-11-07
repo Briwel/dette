@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f3faff;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed-dim": "#bdcabe", "inverse-primary": "#bac9d3", "secondary-container": "#d9e6da", "on-surface-variant": "#43474a", "on-error": "#ffffff", "on-surface": "#071e27", "primary": "#526069", "on-secondary-fixed-variant": "#3e4a41", "tertiary-fixed": "#f1dee1", "on-tertiary-fixed-variant": "#504346", "surface": "#f3faff", "primary-container": "#e3f2fd", "on-tertiary": "#ffffff", "on-primary": "#ffffff", "secondary": "#556158", "on-secondary-fixed": "#131e17", "surface-container-low": "#e6f6ff", "on-error-container": "#93000a", "on-tertiary-container": "#78696c", "surface-container-lowest": "#ffffff", "inverse-surface": "#1e333c", "surface-container-highest": "#cfe6f2", "surface-tint": "#526069", "surface-dim": "#c7dde9", "outline-variant": "#c3c7cb", "outline": "#73787b", "inverse-on-surface": "#dff4ff", "primary-fixed": "#d6e5ef", "background": "#f3faff", "on-secondary": "#ffffff", "error": "#ba1a1a", "surface-bright": "#f3faff", "on-primary-fixed-variant": "#3b4951", "tertiary-fixed-dim": "#d4c2c5", "primary-fixed-dim": "#bac9d3", "surface-variant": "#cfe6f2", "on-primary-fixed": "#0f1d25", "on-tertiary-fixed": "#23191b", "on-secondary-container": "#5b675e", "error-container": "#ffdad6", "on-background": "#071e27", "secondary-fixed": "#d9e6da", "surface-container-high": "#d5ecf8", "tertiary": "#695b5e", "surface-container": "#dbf1fe", "tertiary-container": "#ffebee", "on-primary-container": "#606f78" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "touch-target-min": "60px", "stack-gap": "12px", "card-padding": "24px", "margin-mobile": "20px", "gutter": "16px" }, "fontFamily": { "headline-lg": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "display-amount": ["Inter"], "label-md": ["Inter"] }, "fontSize": { "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }], "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "700" }], "display-amount": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }] } } } }</script></head><body class="bg-background text-on-surface flex flex-col min-h-screen font-body-lg text-body-lg"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-gutter"><button aria-label="Menu principal" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface rounded-full hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[26px]">menu</span></button><span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">Dantokpa Crédit</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 px-margin-mobile bg-surface min-h-screen"><div class="flex flex-col w-full gap-stack-gap">
+<!-- Guidance Card -->
+<div class="bg-surface-container-low rounded-xl p-card-padding shadow-sm flex items-start gap-gutter">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[26px]" style="font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Planifier un remboursement</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Anticipez vos sorties d'argent pour garder la confiance de vos partenaires de marché.</p>
+</div>
+</div>
+<!-- Fournisseur Actif -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Fournisseur sélectionné</span>
+<button class="font-label-md text-label-md text-primary font-bold flex items-center gap-1 hover:underline" type="button">
+<span>Changer</span>
+<span class="material-symbols-outlined text-[16px]">sync</span>
+</button>
+</div>
+<div class="flex items-center gap-gutter bg-surface-container-low rounded-lg p-3">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Portrait chaleureux et souriant d'une marchande africaine béninoise portant un foulard traditionnel bleu clair et beige dans les allées du marché Dantokpa, lumière douce du matin, photographie portrait bienveillante et nette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa7L3MwpJMPJvelCqVWCXJjQqU3MJoIGhDsSczvl8R84iUsnXg_MRdPK3D6hTwZEwE9xLX8v-GPo24geldQh6y3yYRq9l1r-WqrbJ5JXaam4m4YxNHCD_8VCXJTdrsoX90AUGh7fQuFEs2RgUMPJFLD5J8yx0TeFSl0AO4D7pK8zQuz5zoyZHoBEUtO8eeX57T9HNggh2Sy3QjBKsJAC03M-Qq-jMVaY72xjvo4gg9haZJXuQFTwz1qg"/>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface truncate">Awa Tchikpé</span>
+<span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings: 'FILL' 1;" title="Vérifiée">verified</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Tissus Wax • Stand B-14</span>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-label-md text-label-md text-on-surface-variant">Dette totale</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-error font-bold tracking-tight">78 000 F</span>
+</div>
+</div>
+</div>
+<!-- Date Selection -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Date prévue du paiement</span>
+<div class="bg-surface-container rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface" id="display-selected-date">Vendredi 22 Septembre</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Jour de grand marché à Dantokpa</span>
+</div>
+</div>
+<button aria-label="Choisir sur le calendrier" class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">edit_calendar</span>
+</button>
+</div>
+<!-- Raccourcis date -->
+<div class="grid grid-cols-3 gap-2 mt-1">
+<button class="date-chip h-11 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors" onclick="selectQuickDate(this, 'Demain (Samedi)')" type="button">
+        Demain
+      </button>
+<button class="date-chip h-11 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center transition-colors" onclick="selectQuickDate(this, 'Vendredi 22 Septembre')" type="button">
+        Ce vendredi
+      </button>
+<button class="date-chip h-11 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors" onclick="selectQuickDate(this, 'Vendredi 29 Septembre')" type="button">
+        Dans 1 sem.
+      </button>
+</div>
+</div>
+<!-- Montant Programmé -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Montant à verser</span>
+<span class="font-label-md text-label-md text-secondary font-bold">Franc CFA</span>
+</div>
+<div class="flex items-baseline justify-center py-2">
+<span class="font-display-amount text-display-amount text-on-surface tracking-tight" id="amount-val">25 000</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface-variant ml-2 font-bold">FCFA</span>
+</div>
+<!-- Boutons rapides montants -->
+<div class="grid grid-cols-2 gap-2">
+<button class="h-12 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1 transition-colors" onclick="addAmount(5000)" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>5 000 FCFA</span>
+</button>
+<button class="h-12 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1 transition-colors" onclick="addAmount(10000)" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>10 000 FCFA</span>
+</button>
+<button class="h-12 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors" onclick="setAmount(39000)" type="button">
+        Moitié (39 000)
+      </button>
+<button class="h-12 rounded-lg bg-secondary-container text-on-secondary-container font-label-md text-label-md flex items-center justify-center font-bold transition-colors" onclick="setAmount(78000)" type="button">
+        Tout solder (78 000)
+      </button>
+</div>
+<!-- Calcul Reste Dû -->
+<div class="bg-secondary-container/60 rounded-xl p-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+<span class="material-symbols-outlined text-[22px]">check_circle</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-secondary-container">Reste dû après ce paiement :</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-container font-bold" id="remaining-val">53 000 FCFA</span>
+</div>
+</div>
+</div>
+<!-- Rappel Automatique -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface">Rappel vocal &amp; SMS</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Me rappeler la veille au matin (07h30)</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-surface-container-lowest after:rounded-full after:h-6 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Remboursements déjà programmés -->
+<div class="flex flex-col gap-2 mt-2">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Déjà au planning ce mois</span>
+<span class="font-label-md text-label-md text-primary font-bold">2 prévus</span>
+</div>
+<!-- Carte Planifiée 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-full overflow-hidden bg-surface-container-highest shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait franc d'un grossiste de céréales à Cotonou au Bénin, souriant devant son comptoir en bois patiné, atmosphère sereine de marché, tonalités douces bleu et ambre." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdcHuR_USxOL7g8R8dH3lvRgZ6o140IpAgzcDSJxcpAZGjnphvesPXhsDO8miA2NB1rTQIdARP8t3U36AR5dioJmvLQdzR_Peuj-sQKvkD-70q5TbuxZ6KZXrwZEbAyoCDM96t2GzIXwyFhQulAAjJYIpNqgbc-x9BZGS5N_w1kMr-x3EQtnS86TkxMPFE98hcwhktsF9l_tVn1L-KNut5dAsNIcXXZyydq-UJqan-vepXKyYRwkdLMA"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface truncate">Koffi Mensah</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Lundi 18 Septembre</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">15 000 F</span>
+<span class="font-label-md text-label-md text-secondary font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">alarm</span> Prêt
+        </span>
+</div>
+</div>
+<!-- Carte Planifiée 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-full overflow-hidden bg-surface-container-highest shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait en lumière naturelle d'une vendeuse d'épices au marché de Dantokpa, regard calme et confiant, tenue sobre, bokeh délicat d'étals colorés et soignés en arrière-plan." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGm0kWevK43GjQonNA9Hgd9pf8QZbWzb_PP1VsZ-pTFa__pIHNrADKaQFL64AHf1udn6EOmqtlw_nD8-C1divlg1ISlyBcwRvONLhDipsZ3xBt76wx8W8UvwSjXrvDdLfG0rp15RsAi8bDRywEeOo2RzvNIFvS5a07lRqdQdSg_A_dKPyhRx4CvXKQa4VE5B9nEwI1dy3t9jG404UgdGm7MpsbLqibvckzkU6qK-Ipzlj6rJjEY1YbXA"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface truncate">Maman Victoire</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Jeudi 21 Septembre</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">20 000 F</span>
+<span class="font-label-md text-label-md text-secondary font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">alarm</span> Prêt
+        </span>
+</div>
+</div>
+</div>
+<!-- Bouton Principal CTA -->
+<div class="pt-2 pb-1">
+<button class="w-full min-h-touch-target bg-primary hover:bg-on-surface-variant text-on-primary rounded-xl px-card-padding flex items-center justify-center gap-2 font-headline-lg-mobile text-headline-lg-mobile shadow-md transition-all active:scale-[0.99]" onclick="confirmSchedule(this)" type="button">
+<span class="material-symbols-outlined text-[24px]">bookmark_added</span>
+<span>Enregistrer la programmation</span>
+</button>
+</div>
+</div>
+<script>
+  let totalDebt = 78000;
+  let currentAmount = 25000;
+
+  function updateDisplay() {
+    const formatted = currentAmount.toLocaleString('fr-FR');
+    document.getElementById('amount-val').textContent = formatted;
+
+    const remaining = Math.max(0, totalDebt - currentAmount);
+    document.getElementById('remaining-val').textContent = remaining.toLocaleString('fr-FR') + ' FCFA';
+  }
+
+  function addAmount(val) {
+    currentAmount = Math.min(totalDebt, currentAmount + val);
+    updateDisplay();
+  }
+
+  function setAmount(val) {
+    currentAmount = Math.min(totalDebt, val);
+    updateDisplay();
+  }
+
+  function selectQuickDate(btn, label) {
+    document.querySelectorAll('.date-chip').forEach(el => {
+      el.className = 'date-chip h-11 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors';
+    });
+    btn.className = 'date-chip h-11 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center transition-colors';
+    document.getElementById('display-selected-date').textContent = label;
+  }
+
+  function confirmSchedule(button) {
+    const originalContent = button.innerHTML;
+    button.disabled = true;
+    button.className = 'w-full min-h-touch-target bg-secondary text-on-secondary rounded-xl px-card-padding flex items-center justify-center gap-2 font-headline-lg-mobile text-headline-lg-mobile shadow-md transition-all';
+    button.innerHTML = '<span class="material-symbols-outlined text-[24px]">done_all</span><span>Remboursement programmé !</span>';
+    setTimeout(() => {
+      button.innerHTML = originalContent;
+      button.className = 'w-full min-h-touch-target bg-primary hover:bg-on-surface-variant text-on-primary rounded-xl px-card-padding flex items-center justify-center gap-2 font-headline-lg-mobile text-headline-lg-mobile shadow-md transition-all active:scale-[0.99]';
+      button.disabled = false;
+    }, 2400);
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-20 px-gutter"><a class="flex flex-col items-center justify-center min-w-[60px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="accueil" href="#"><span class="material-symbols-outlined text-[26px]">home</span><span class="font-label-md text-label-md mt-1">Accueil</span></a><a class="flex flex-col items-center justify-center min-w-[60px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-all" data-path="fournisseurs" href="#"><span class="material-symbols-outlined text-[26px]">storefront</span><span class="font-label-md text-label-md mt-1">Fournisseurs</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[60px] min-h-[44px] py-1 transition-all text-primary font-bold" data-path="planning" href="#"><span class="material-symbols-outlined text-[26px]">calendar_month</span><span class="font-label-md text-label-md mt-1">Planning</span></a></div></nav></body></html>

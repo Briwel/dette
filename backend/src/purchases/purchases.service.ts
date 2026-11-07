@@ -61,9 +61,16 @@ export class PurchasesService {
 
     const items = data.items || [];
     let calculatedTotal = 0;
+    let descriptionParts = [];
     for (const item of items) {
       calculatedTotal += Number(item.price || item.unitPrice || 0);
+      if (item.name) {
+        let part = item.name;
+        if (item.quantity) part += ` x ${item.quantity}`;
+        descriptionParts.push(part);
+      }
     }
+    const description = data.description || descriptionParts.join(', ');
 
     const totalAmount = data.montant_total || calculatedTotal || 0;
     const initialPayment = Number(data.deja_paye || data.initialPayment || 0);
@@ -78,6 +85,7 @@ export class PurchasesService {
       montant_initialement_paye: initialPayment,
       montant_restant: remainingAmount,
       statut: status,
+      description: description,
     });
 
     const savedPurchase = await this.purchasesRepository.save(newPurchase);

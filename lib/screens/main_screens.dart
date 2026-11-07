@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
 import 'advice_screen.dart';
-import 'settings_screen.dart';
 import 'add_purchase_screen.dart';
 import 'daily_revenue_screen.dart';
 import 'payment_screen.dart';
 import 'add_supplier_screen.dart';
+import 'purchases_list_screen.dart';
+import 'planning_screen.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/quick_action_button.dart';
 import '../widgets/fournisseur_card.dart';
+import '../theme/app_theme.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -40,8 +42,7 @@ class _MainNavigationState extends State<MainNavigation> {
     final List<Widget> widgetOptions = <Widget>[
       HomeScreen(onSelectTab: _onItemTapped),
       const FournisseursScreen(),
-      const VentesScreen(),
-      const ProfilScreen(),
+      const PlanningScreen(),
     ];
 
     return Scaffold(
@@ -60,18 +61,13 @@ class _MainNavigationState extends State<MainNavigation> {
             label: 'Fournisseurs',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.payments_outlined),
-            activeIcon: Icon(Icons.payments),
-            label: 'Ventes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
+            icon: Icon(Icons.calendar_month_outlined),
+            activeIcon: Icon(Icons.calendar_month),
+            label: 'Planning',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF1E3A8A),
+        selectedItemColor: AppColors.primary,
         onTap: _onItemTapped,
       ),
     );
@@ -125,28 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: const Text(
           'Dantokpa Crédit',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E293B),
+            color: AppColors.textPrimary,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
-            },
-            icon: const Icon(Icons.person_outline, color: Color(0xFF334155)),
-          ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: _fetchSummary,
@@ -161,10 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: const Color(0xFFBFDBFE),
+                    color: AppColors.primary.withValues(alpha: 0.2),
                     style: BorderStyle.solid,
                   ),
                 ),
@@ -174,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'DETTE TOTALE',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2563EB),
+                        color: AppColors.primary,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -190,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: const TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF0F172A),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                   ],
@@ -200,17 +184,23 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: SummaryCard(
-                      title: 'Achats en cours',
-                      value: '$_achatsEnCours',
+                    child: InkWell(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PurchasesListScreen(onlyUrgent: false))),
+                      child: SummaryCard(
+                        title: 'Achats en cours',
+                        value: '$_achatsEnCours',
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: SummaryCard(
-                      title: 'Paiements urgents',
-                      value: '$_paiementsUrgents',
-                      color: Colors.red,
+                    child: InkWell(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PurchasesListScreen(onlyUrgent: true))),
+                      child: SummaryCard(
+                        title: 'Paiements urgents',
+                        value: '$_paiementsUrgents',
+                        color: AppColors.error,
+                      ),
                     ),
                   ),
                 ],
@@ -220,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'ACTIONS RAPIDES',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF64748B),
+                  color: AppColors.textSecondary,
                   fontSize: 13,
                 ),
               ),
@@ -244,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       if (res == true) _fetchSummary();
                     },
-                    backgroundColor: Colors.blue.withOpacity(0.1),
                   ),
                   QuickActionButton(
                     icon: Icons.group_outlined,
@@ -261,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
                     },
-                    backgroundColor: Colors.blue.withOpacity(0.1),
                   ),
                   QuickActionButton(
                     icon: Icons.account_balance_wallet_outlined,
@@ -275,7 +263,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       if (res == true) _fetchSummary();
                     },
-                    backgroundColor: Colors.green.withOpacity(0.1),
                   ),
                   QuickActionButton(
                     icon: Icons.calculate_outlined,
@@ -289,7 +276,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       if (res == true) _fetchSummary();
                     },
-                    backgroundColor: Colors.pink.withOpacity(0.1),
                   ),
                 ],
               ),
@@ -305,21 +291,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.lightbulb_outline, color: Colors.amber),
+                      Icon(Icons.lightbulb_outline, color: AppColors.warning),
                       SizedBox(width: 16),
                       Expanded(
                         child: Text(
                           'Conseils de remboursement',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                         ),
                       ),
-                      Icon(Icons.chevron_right, color: Colors.grey),
+                      Icon(Icons.chevron_right, color: AppColors.textSecondary),
                     ],
                   ),
                 ),
@@ -410,14 +396,12 @@ class _FournisseursScreenState extends State<FournisseursScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: const Text('Mes Fournisseurs', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.person_add_alt_1_outlined, color: Color(0xFF334155)),
+            icon: const Icon(Icons.person_add_alt_1_outlined),
             tooltip: 'Ajouter un fournisseur',
             onPressed: _openAddSupplier,
           ),
@@ -431,7 +415,7 @@ class _FournisseursScreenState extends State<FournisseursScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Rechercher un fournisseur...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search, color: AppColors.textSecondary),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
@@ -441,15 +425,15 @@ class _FournisseursScreenState extends State<FournisseursScreen> {
                       )
                     : null,
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: AppColors.surface,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
               ),
             ),
@@ -466,7 +450,7 @@ class _FournisseursScreenState extends State<FournisseursScreen> {
                               Center(
                                 child: Text(
                                   'Aucun fournisseur trouvé',
-                                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                                  style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
                                 ),
                               ),
                             ],
@@ -491,7 +475,7 @@ class _FournisseursScreenState extends State<FournisseursScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openAddSupplier,
-        backgroundColor: const Color(0xFF4C5D6B),
+        backgroundColor: AppColors.primary,
         icon: const Icon(Icons.add, color: Colors.white),
         label: const Text('Fournisseur', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
@@ -548,7 +532,6 @@ class _VentesScreenState extends State<VentesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Historique des ventes', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Column(
@@ -561,7 +544,7 @@ class _VentesScreenState extends State<VentesScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFE0F2FE),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -572,7 +555,7 @@ class _VentesScreenState extends State<VentesScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF0369A1),
+                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -581,7 +564,7 @@ class _VentesScreenState extends State<VentesScreen> {
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF0F172A),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ],
@@ -592,7 +575,7 @@ class _VentesScreenState extends State<VentesScreen> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               'Historique récent',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF334155)),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
           ),
           Expanded(
@@ -605,7 +588,7 @@ class _VentesScreenState extends State<VentesScreen> {
                             children: const [
                               SizedBox(height: 60),
                               Center(
-                                child: Text('Aucune vente enregistrée', style: TextStyle(color: Colors.grey)),
+                                child: Text('Aucune vente enregistrée', style: TextStyle(color: AppColors.textSecondary)),
                               ),
                             ],
                           )
@@ -626,19 +609,22 @@ class _VentesScreenState extends State<VentesScreen> {
 
                               return Card(
                                 margin: const EdgeInsets.only(bottom: 12),
+                                color: AppColors.surface,
+                                elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
+                                  side: const BorderSide(color: AppColors.border),
                                 ),
                                 child: ListTile(
                                   leading: CircleAvatar(
-                                    backgroundColor: const Color(0xFFE2E8F0),
-                                    child: const Icon(Icons.shopping_cart_outlined, color: Color(0xFF475569)),
+                                    backgroundColor: AppColors.background,
+                                    child: const Icon(Icons.shopping_cart_outlined, color: AppColors.textSecondary),
                                   ),
                                   title: Text(
                                     '${NumberFormat('#,###').format(montant).replaceAll(',', ' ')} FCFA',
-                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
                                   ),
-                                  subtitle: Text(dateFormatted),
+                                  subtitle: Text(dateFormatted, style: const TextStyle(color: AppColors.textSecondary)),
                                 ),
                               );
                             },
@@ -663,7 +649,7 @@ class _VentesScreenState extends State<VentesScreen> {
                 _fetchVentes();
               }
             },
-            backgroundColor: const Color(0xFF4C5D6B),
+            backgroundColor: AppColors.primary,
             icon: const Icon(Icons.add, color: Colors.white),
             label: const Text(
               'Ajouter une vente',
@@ -673,14 +659,5 @@ class _VentesScreenState extends State<VentesScreen> {
         ),
       ),
     );
-  }
-}
-
-class ProfilScreen extends StatelessWidget {
-  const ProfilScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: SettingsScreen());
   }
 }
